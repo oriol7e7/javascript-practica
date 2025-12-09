@@ -54,10 +54,6 @@ const getPokemons = async function(){
                 crearPokemon(imatge, num, nom, tipusArray);
             });
 
-            
-
-            
-            
         } else {
             console.log("No hi ha cap pokemon");
         }
