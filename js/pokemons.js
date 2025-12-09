@@ -30,7 +30,7 @@ const getPokemons = async function(){
             let nom = "";
             let tipusArray;
             
-            //Bucle per mostrar per consola els pokemons
+            //Bucle per mostrar per consola els pokemons i cridar funcio de crearPokemon
             data.pokemon.forEach((element, i) => {
                 console.log('url-imatge');
                 console.log(element.img);
