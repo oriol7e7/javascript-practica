@@ -203,12 +203,19 @@ header input:focus {
   background-color: #ff4b4b;
   color: white;
   transition: all .3s ease;
+  margin: 4px;
 }
 .filterButton:hover {
   border: solid 2px #ff4b4b;
   background-color: white;
   color: #ff4b4b;
   cursor: pointer;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 @media (max-width: 768px) {
   main {

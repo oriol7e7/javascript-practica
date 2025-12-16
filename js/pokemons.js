@@ -30,13 +30,26 @@ const getPokemons = async function () {
             printPokemons(data.pokemon);
 
             const reverseButton = document.getElementById('filterButton');
-            reverseButton.addEventListener('click', ()=> {
+            reverseButton.addEventListener('click', () => {
                 printPokemons(data.pokemon, true)
+            })
+
+            const reverseNameButton = document.getElementById('filterNameButton');
+            let up = true;
+            reverseNameButton.addEventListener('click', () => {
+                if (up) {
+                    orderByName(data.pokemon, up);
+                    up = false;
+                } else {
+                    orderByName(data.pokemon, up);
+                    up = true;
+                }
+
             })
 
             const input = document.getElementById('searchPokemon');
 
-            input.addEventListener('input', function (event) {
+            input.addEventListener('input', () => {
                 let pokemonBuscat = input.value;
 
                 console.log("Pokemon Buscat:", pokemonBuscat);
@@ -46,7 +59,7 @@ const getPokemons = async function () {
                 } else {
                     console.log("Entra 2")
                     // SI BUSCA ALGO BUIDA LA SECTION Y CREA CARDS RECORRENT EL JSON I CREANT LES CARDS SI EL NOM DEL POKEMON ES SEMBLANT AL POKEMON BUSCAT
-                    printSearchedPokemon(data.pokemon, pokemonBuscat);
+                    renderPokemons(data.pokemon, pokemonBuscat);
                 }
 
             })
@@ -87,7 +100,11 @@ function crearInput() {
             <label for="searchPokemon">Busca un Pokemon</label>
             <input type="text" name="searchPokemon" id="searchPokemon" placeholder="Posa un nom, num o tipus...">
             <div class="buttons">
+            <p>Order by num: </p>
             <button id="filterButton" class="filterButton">▲▼</button>
+            <p>|</p>
+            <p>Order by name: </p>
+            <button id="filterNameButton" class="filterButton">▲▼</button>
             </div>
         `;
 
@@ -101,38 +118,46 @@ function printPokemons(dataPokemon, reverse) {
 
     if (reverse) {
         dataPokemon.reverse();
-        dataPokemon.forEach((element, i) => {
-            let img = element.img;
-            let num = element.num;
-            let nom = element.name;
-            let type = element.type;
-            crearPokemon(img, num, nom, type)
-        })
-    } else {
-        dataPokemon.forEach((element, i) => {
-            let img = element.img;
-            let num = element.num;
-            let nom = element.name;
-            let type = element.type;
-            crearPokemon(img, num, nom, type)
-        })
     }
+
+    renderPokemons(dataPokemon);
+}
+
+function orderByName(dataPokemon, up) {
+    const section = document.getElementById('container-pokemons');
+    section.innerHTML = "";
+    let orderedPokemons = []
+    if (up) {
+        orderedPokemons = dataPokemon.toSorted((a, b) => a.name.localeCompare(b.name));
+    } else {
+        orderedPokemons = dataPokemon.toSorted((a, b) => b.name.localeCompare(a.name));
+    }
+    console.log(up);
+    console.log("DEBUG AQUI");
+    renderPokemons(orderedPokemons);
+
 
 }
 
-function printSearchedPokemon(dataPokemon, pokemonBuscat) {
-    const section = document.getElementById('container-pokemons');
-    section.innerHTML = "";
-
-    dataPokemon.forEach((element, i) => {
-        if (element.name.toLowerCase().includes(pokemonBuscat.toLowerCase()) || element.num.toLowerCase().includes(pokemonBuscat.toLowerCase()) || element.type.join(' ').toLowerCase().includes(pokemonBuscat.toLowerCase())) {
+function renderPokemons(data, pokemonBuscat) {
+    if (pokemonBuscat != null) {
+        const section = document.getElementById('container-pokemons');
+        section.innerHTML = "";
+        data.forEach((element, i) => {
+            if (element.name.toLowerCase().includes(pokemonBuscat.toLowerCase()) || element.num.toLowerCase().includes(pokemonBuscat.toLowerCase()) || element.type.join(' ').toLowerCase().includes(pokemonBuscat.toLowerCase())) {
+                crearPokemon(element.img, element.num, element.name, element.type);
+            }
+        });
+    } else {
+        data.forEach((element, i) => {
             let imatge = element.img;
             let num = element.num;
-            let nom = element.name;
+            let nom = element.name; 
             let tipusArray = element.type;
             crearPokemon(imatge, num, nom, tipusArray);
-        }
-    });
+        })
+    }
+
 }
 
 document.addEventListener('DOMContentLoaded', function () {
